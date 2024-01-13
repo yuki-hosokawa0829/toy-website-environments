@@ -17,11 +17,7 @@ env:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Run Bicep linter
-      run: az bicep build --file deploy/main.bicep
+    uses: ./.github/workflows/lint.yml
 
   validate:
     runs-on: ubuntu-latest
@@ -101,3 +97,27 @@ jobs:
           -CI
       name: Run smoke tests
       shell: pwsh
+
+  # Deploy to the test environment.
+  deploy-test:
+    uses: ./.github/workflows/deploy.yml
+    needs: lint
+    with:
+      environmentType: Test
+      resourceGroupName: ToyWebsiteTest
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID_TEST }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+  # Deploy to the production environment.
+  deploy-production:
+    uses: ./.github/workflows/deploy.yml
+    needs: deploy-test
+    with:
+      environmentType: Production
+      resourceGroupName: ToyWebsiteProduction
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID_PRODUCTION }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
