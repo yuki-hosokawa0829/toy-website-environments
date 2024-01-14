@@ -21,9 +21,9 @@ param reviewApiKey string
 
 // Define the names for resources.
 var appServiceAppName = 'toy-website-${resourceNameSuffix}'
-var appServicePlanName = 'toy-website'
+var appServicePlanName = 'toy-website-${resourceNameSuffix}'
 var logAnalyticsWorkspaceName = 'workspace-${resourceNameSuffix}'
-var applicationInsightsName = 'toywebsite'
+var applicationInsightsName = 'toywebsite${resourceNameSuffix}'
 var storageAccountName = 'mystorage${resourceNameSuffix}'
 
 // Define the SKUs for each component based on the environment type.
