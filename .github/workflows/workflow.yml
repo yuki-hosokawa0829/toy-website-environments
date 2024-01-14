@@ -11,12 +11,9 @@ permissions:
   id-token: write
   contents: read
 
-env:
-  AZURE_RESOURCEGROUP_NAME: ToyWebsiteTest
-  ENVIRONMENT_TYPE: Test
-
 jobs:
-  # Lint the Bicep code.
+
+  # Lint the Bicep file.
   lint:
     uses: ./.github/workflows/lint.yml
 
